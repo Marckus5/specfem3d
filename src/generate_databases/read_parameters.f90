@@ -114,6 +114,8 @@
     write(IMAIN,'(a)',advance='yes') '  SEP'
     case (IMODEL_COUPLED)
     write(IMAIN,'(a)',advance='yes') '  model coupled with injection method'
+    case (IMODEL_1D_IASP91)
+    write(IMAIN,'(a)',advance='yes') '  1d_iasp91'
     end select
 
     write(IMAIN,*)

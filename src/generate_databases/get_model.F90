@@ -529,7 +529,7 @@
 
   use generate_databases_par, only: IMODEL,IMODEL_DEFAULT,IMODEL_GLL,IMODEL_1D_PREM,IMODEL_1D_CASCADIA,IMODEL_1D_SOCAL, &
     IMODEL_SALTON_TROUGH,IMODEL_TOMO,IMODEL_USER_EXTERNAL,IMODEL_IPATI,IMODEL_IPATI_WATER, &
-    IMODEL_1D_PREM_PB,IMODEL_GLL, IMODEL_SEP,IMODEL_COUPLED, &
+    IMODEL_1D_PREM_PB,IMODEL_GLL, IMODEL_SEP,IMODEL_COUPLED, IMODEL_1D_IASP91, &
     IDOMAIN_ACOUSTIC,IDOMAIN_ELASTIC,ATTENUATION_COMP_MAXIMUM
 
   use generate_databases_par, only: undef_mat_prop
@@ -663,6 +663,9 @@
     ! adds/gets velocity model as specified in model_coupled.f90
     call model_coupled_values(xmesh,ymesh,zmesh,rho,vp,vs)
 
+  case (IMODEL_1D_IASP91)
+    ! 1D model profile for Cascadia region
+    call model_1D_iasp91(xmesh,ymesh,zmesh,rho,vp,vs,qmu_atten,qkappa_atten)
   case default
     stop 'Error model not implemented yet'
   end select

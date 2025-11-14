@@ -1339,6 +1339,8 @@
     !endif
   case ('coupled')
     IMODEL = IMODEL_COUPLED
+  case ('1d_iasp91')
+    IMODEL = IMODEL_1D_IASP91
   case default
     print *
     print *,'********** model not recognized: ',trim(MODEL),' **************'

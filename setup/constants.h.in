@@ -836,6 +836,7 @@
   integer, parameter :: IMODEL_IPATI_WATER      = 11
   integer, parameter :: IMODEL_SEP              = 12
   integer, parameter :: IMODEL_COUPLED          = 13
+  integer, parameter :: IMODEL_1D_IASP91        = 14
 
 !!-----------------------------------------------------------
 !!
