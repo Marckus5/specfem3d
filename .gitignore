@@ -47,3 +47,9 @@ doc/USER_MANUAL/Schedule
 # misc
 .aider*
 
+OUTPUT_FILES
+EXAMPLES/real_world/Mendocino_Mw7.0/OUTPUT_FILES
+EXAMPLES/real_world/Mendocino_Mw7.0/DATABASES_MPI
+EXAMPLES/real_world/*/DATABASES_MPI/*
+EXAMPLES/real_world/*/OUTPUT_FILES/*
+EXAMPLES/applications/meshfem3D_examples/socal1D/OUTPUT_FILES*
