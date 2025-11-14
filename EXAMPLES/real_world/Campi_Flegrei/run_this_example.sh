@@ -44,7 +44,7 @@ echo
 mpirun -np $NPROC ./bin/xmeshfem3D
 
 # checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+if [[ $? -ne 0 ]]; then return 1; fi
 
 # runs database generation
 echo
@@ -53,7 +53,7 @@ echo
 mpirun -np $NPROC ./bin/xgenerate_databases
 
 # checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+if [[ $? -ne 0 ]]; then return 1; fi
 
 # runs simulation
 echo
@@ -62,7 +62,7 @@ echo
 mpirun -np $NPROC ./bin/xspecfem3D
 
 # checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+if [[ $? -ne 0 ]]; then return 1; fi
 
 echo
 echo "see results in directory: OUTPUT_FILES/"

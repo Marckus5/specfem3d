@@ -11,7 +11,7 @@ echo
 # checks if executables were compiled and available
 if [ ! -e ../../../../bin/xspecfem3D ]; then
   echo "Please compile first all binaries in the root directory, before running this example..."; echo
-  exit 1
+  return 1
 fi
 
 # cleans output files
@@ -22,9 +22,10 @@ rm -rf OUTPUT_FILES/*
 mkdir -p bin
 cd bin/
 rm -f *
-ln -s ../../../../../bin/xmeshfem3D
-ln -s ../../../../../bin/xgenerate_databases
-ln -s ../../../../../bin/xspecfem3D
+# ln -s ../../../../../bin/xmeshfem3D
+# ln -s ../../../../../bin/xgenerate_databases
+# ln -s ../../../../../bin/xspecfem3D
+ln -s ../../../../../bin/* ./
 cd ../
 
 # stores setup
@@ -54,7 +55,7 @@ else
   mpirun -np $NPROC ./bin/xmeshfem3D
 fi
 # checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+if [[ $? -ne 0 ]]; then return 1; fi
 
 # runs database generation
 if [ "$NPROC" -eq 1 ]; then
@@ -71,7 +72,7 @@ else
   mpirun -np $NPROC ./bin/xgenerate_databases
 fi
 # checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+if [[ $? -ne 0 ]]; then return 1; fi
 
 # runs simulation
 if [ "$NPROC" -eq 1 ]; then
@@ -88,7 +89,29 @@ else
   mpirun -np $NPROC ./bin/xspecfem3D
 fi
 # checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+if [[ $? -ne 0 ]]; then return 1; fi
+
+
+
+# simulation steps
+NSTEP=`grep ^NSTEP DATA/Par_file | grep -v -E '^[[:space:]]*#' | cut -d = -f 2`
+
+echo "Par_file:"
+echo "  NSTEP = $NSTEP"
+echo
+
+# creates movie files w/ norm of velocity
+
+./bin/xcreate_movie_shakemap_AVS_DX_GMT << EOF
+3
+1
+$NSTEP
+1
+1
+EOF
+mkdir OUTPUT_FILES/_movie
+mv OUTPUT_FILES/gmt_movie*.xyz OUTPUT_FILES/_movie
+
 
 echo
 echo "see results in directory: OUTPUT_FILES/"

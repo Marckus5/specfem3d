@@ -68,7 +68,7 @@ echo
 rm -f out.jpg
 
 # render
-./plot_with_blender.py --vtk_file=OUTPUT_FILES/AVS_movie_$tt.inp --color-max=8.e-17 --colormap=16 \
+python plot_with_blender.py --vtk_file=OUTPUT_FILES/AVS_movie_$tt.inp --color-max=8.e-17 --colormap=16 \
   --title="Birch glacier collapse" \
   --transparent-sea-level --background-dark --matte --suppress \
   --locations=location.dat --borders=AVS_boundaries_utm.CH.inp \
@@ -83,7 +83,7 @@ fi
 done
 
 # render movie
-./xcreate_ffmpeg_movie.slow.sh HD
+. ./xcreate_ffmpeg_movie.slow.sh HD
 
 
 

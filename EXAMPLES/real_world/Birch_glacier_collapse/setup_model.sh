@@ -23,7 +23,7 @@ shift_lat=0.4    # to shift center location
 shift_lon=0.4
 
 # IRIS EMC model
-use_emc=0       # 0 == not using / 1 == download IRIS model and convert to SPECFEM format
+use_emc=1       # 0 == not using / 1 == download IRIS model and convert to SPECFEM format
 emc_model="LSP-Eucrust1.0.nc"
 
 # USGS VS30
@@ -93,10 +93,10 @@ if [ ! -e ./run_get_simulation_topography.py ]; then
 fi
 
 # topo
-./run_get_simulation_topography.py $region --SRTM=$topo --toposhift=$toposhift --toposcale=$toposcale
+python run_get_simulation_topography.py $region --SRTM=$topo --toposhift=$toposhift --toposcale=$toposcale
 
-# checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+# checks return code
+if [[ $? -ne 0 ]]; then return 1; fi
 
 # create dummy interface at 500 m depth for USGS Vs30
 if [ -e topo_data/ptopo.xyz.1.dat ]; then
@@ -130,17 +130,17 @@ if [ "${use_emc}" == "1" ]; then
     cd IRIS_EMC/
 
     wget https://ds.iris.edu/ds/products/script/emcscript/meta_2.py?model=${emc_model}
-    # checks exit code
-    if [[ $? -ne 0 ]]; then exit 1; fi
+    # checks return code
+    if [[ $? -ne 0 ]]; then return 1; fi
 
     mv -v meta_2.py\?model=${emc_model} ${emc_model}.metadata.txt
-    # checks exit code
-    if [[ $? -ne 0 ]]; then exit 1; fi
+    # checks return code
+    if [[ $? -ne 0 ]]; then return 1; fi
 
     wget https://ds.iris.edu/files/products/emc/emc-files/${emc_model}
 
-    # checks exit code
-    if [[ $? -ne 0 ]]; then exit 1; fi
+    # checks return code
+    if [[ $? -ne 0 ]]; then return 1; fi
 
     cd ../
   fi
@@ -155,15 +155,15 @@ if [ "${use_emc}" == "1" ]; then
     ln -s ../../../utils/scripts/run_convert_IRIS_EMC_netCDF_2_tomo.py
   fi
 
-  ./run_convert_IRIS_EMC_netCDF_2_tomo.py --EMC_file=IRIS_EMC/${emc_model} --mesh_area=$regionShortExtended --maximum_depth="${DEPTH}"
-  # checks exit code
-  if [[ $? -ne 0 ]]; then exit 1; fi
+  python run_convert_IRIS_EMC_netCDF_2_tomo.py --EMC_file=IRIS_EMC/${emc_model} --mesh_area=$regionShortExtended --maximum_depth="${DEPTH}"
+  # checks return code
+  if [[ $? -ne 0 ]]; then return 1; fi
 
   mkdir -p DATA/tomo_files
   mv -v tomography_model.* DATA/tomo_files/
 
-  # checks exit code
-  if [[ $? -ne 0 ]]; then exit 1; fi
+  # checks return code
+  if [[ $? -ne 0 ]]; then return 1; fi
 fi
 
 ##
@@ -180,10 +180,10 @@ if [ "${use_vs30}" == "1" ]; then
     ln -s ../../../utils/scripts/run_get_simulation_USGS_Vs30.py
   fi
 
-  ./run_get_simulation_USGS_Vs30.py $regionExtended
+  python run_get_simulation_USGS_Vs30.py $regionExtended
 
-  # checks exit code
-  if [[ $? -ne 0 ]]; then exit 1; fi
+  # checks return code
+  if [[ $? -ne 0 ]]; then return 1; fi
 
   if [ -e USGS_VS30/interface_vs30.dat ]; then
     echo "adding Vs30 interface to DATA/"

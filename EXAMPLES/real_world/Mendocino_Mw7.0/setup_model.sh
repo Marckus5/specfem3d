@@ -24,7 +24,7 @@ lat_min=$3
 lat_max=$4
 
 # usage
-if [ "$1" == "" ]; then echo "./setup_model.sh lon_min lon_max lat_min lat_max"; exit 1; fi
+if [ "$1" == "" ]; then echo "./setup_model.sh lon_min lon_max lat_min lat_max"; return 1; fi
 
 
 region="${lon_min} ${lat_min} ${lon_max} ${lat_max}"
@@ -45,7 +45,7 @@ echo
 ./run_get_simulation_topography.py $region --SRTM=$topo --toposhift=$toposhift
 
 # checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+if [[ $? -ne 0 ]]; then return 1; fi
 
 echo
 echo
@@ -67,16 +67,16 @@ cd IRIS_EMC/
 
 wget https://ds.iris.edu/ds/products/script/emcscript/meta_2.py?model=${model}
 # checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+if [[ $? -ne 0 ]]; then return 1; fi
 
 mv -v meta_2.py\?model=${model} ${model}.metadata.txt
 # checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+if [[ $? -ne 0 ]]; then return 1; fi
 
 wget https://ds.iris.edu/files/products/emc/emc-files/${model}
 
 # checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+if [[ $? -ne 0 ]]; then return 1; fi
 
 cd ../
 fi
@@ -94,15 +94,15 @@ echo "region: $regionShort"
 echo "depth : $DEPTH"
 echo
 
-./run_convert_IRIS_EMC_netCDF_2_tomo.py --EMC_file=IRIS_EMC/${model} --mesh_area=$regionShort --maximum_depth=$DEPTH
+python ./run_convert_IRIS_EMC_netCDF_2_tomo.py --EMC_file=IRIS_EMC/${model} --mesh_area=$regionShort --maximum_depth=$DEPTH
 # checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+if [[ $? -ne 0 ]]; then return 1; fi
 
 mkdir -p DATA/tomo_files
 mv -v tomography_model.* DATA/tomo_files/
 
 # checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+if [[ $? -ne 0 ]]; then return 1; fi
 
 echo
 echo "done"

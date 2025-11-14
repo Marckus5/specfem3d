@@ -51,8 +51,8 @@ else
   echo
   mpirun -np $NPROC ./bin/xmeshfem3D
 fi
-# checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+# checks return code
+if [[ $? -ne 0 ]]; then return 1; fi
 
 # runs database generation
 if [ "$NPROC" -eq 1 ]; then
@@ -68,8 +68,8 @@ else
   echo
   mpirun -np $NPROC ./bin/xgenerate_databases
 fi
-# checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+# checks return code
+if [[ $? -ne 0 ]]; then return 1; fi
 
 # runs simulation
 if [ "$NPROC" -eq 1 ]; then
@@ -85,8 +85,8 @@ else
   echo
   mpirun -np $NPROC ./bin/xspecfem3D
 fi
-# checks exit code
-if [[ $? -ne 0 ]]; then exit 1; fi
+# checks return code
+if [[ $? -ne 0 ]]; then return 1; fi
 
 echo
 echo "see results in directory: OUTPUT_FILES/"
